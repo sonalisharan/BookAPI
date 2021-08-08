@@ -20,56 +20,63 @@
 // We need an API
 
 // GET
-// to get all books
-// to get specific book
-// to get a list of books based on category
-// to get a list of books based on author
+// to get all books 📌✅
+// to get specific book [done] 📌✅
+// to get a list of books based on category [done] 📌✅
+// to get a list of books based on author [task]🔥
 
 // POST 
-// New Book
+// New Book 📌✅
 
 // PUT
-// Update book details
-// Update/add new Author
+// Update book details 📌✅
+// Update/add new Author  📌✅
 
 // DELETE
-// delete a book
-// delete a author from a book
+// delete a book 📌✅
+// delete a author from a book 📌✅
+
+//--------------------------------------------------------------------------------------------------
 
 // Author
 
 // we need an API
 
 // GET
-// to get all authors
-// to get specific author
-// to get a list of authors based on a book.
+// to get all authors 📌✅
+// to get specific author  [task]🔥
+// to get a list of authors based on a book. 📌✅
 
 // POST
-// New Author
+// New Author 📌✅
 
 // PUT
-// Author Details
+// update Author name using id [task]🔥
 
 // DELETE
-// delete an author
+// delete an author [task]🔥
+
+// -------------------------------------------------------------------------------------------------
 
 // Publication
 
 // we need an API
 
 // GET
-// to get all publication
-// to get specific publication
-// to get a list of publications based on a book.
+// to get all publication 📌✅
+// to get specific publication [task]🔥
+// to get a list of publications based on a book. [task]🔥
 
 // POST
-// Add new publication
+// Add new publication [task]🔥
 
 // PUT
-// update publication details
-// update/add new book to a publication
+// update publication name using id [task]🔥
+// update/add new book to a publication 📌✅
 
 // DELETE
-// delete a book from publication
-// delete a publication
+// delete a book from publication  📌✅
+// delete a publication [task]🔥
+
+
+// how the server seves the request 
