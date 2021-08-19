@@ -121,8 +121,9 @@ Access              PUBLIC
 Parameters          NONE
 Method              GET
 */
-shapeAI.get("/publications", (req, res) => {
-    return res.json({ publications: database.publications });
+shapeAI.get("/publications", async (req, res) => {
+    const getAllPublications = await PublicationModel.find();
+    return res.json({ publications: getAllPublications });
 });
 
 /*
@@ -135,7 +136,7 @@ Method              POST
 shapeAI.post("/book/new", async (req, res) => {
     const { newBook } = req.body;
 
-    const addNewBook = BookModel.create(newBook);
+    BookModel.create(newBook);
 
     return res.json({ books: addNewBook, message: "book was added!" });
 });
@@ -175,15 +176,28 @@ Access              PUBLIC
 Parameters          isbn
 Method              PUT
 */
-shapeAI.put("/book/update/:isbn", (req, res) => {
-    database.books.forEach((book) => {
-        if (book.ISBN === req.params.isbn) {
-            book.title = req.body.bookTitle;
-            return;
-        }
-    });
+shapeAI.put("/book/update/:isbn", async (req, res) => {
 
-    return res.json({ books: database.books });
+    const updateBook = await BookModel.findOneAndUpdate(
+        { 
+            ISBN: req.params.isbn
+        },
+        {
+            title: req.body.bookTitle,
+        },
+        {
+            new: true,
+        }
+    );
+
+    // database.books.forEach((book) => {
+    //     if (book.ISBN === req.params.isbn) {
+    //         book.title = req.body.bookTitle;
+    //         return;
+    //     }
+    // });
+
+    return res.json({ books: updateBook });
 });
 
 /*
