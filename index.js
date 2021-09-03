@@ -138,7 +138,7 @@ shapeAI.post("/book/new", async (req, res) => {
 
     BookModel.create(newBook);
 
-    return res.json({ books: addNewBook, message: "book was added!" });
+    return res.json({ message: "book was added!" });
 });
 
 /*
@@ -295,13 +295,17 @@ Access              PUBLIC
 Parameters          isbn
 Method              DELETE
 */
-shapeAI.delete("/book/delete/:isbn", (req, res) => {
-    const updatedBookDatabase =  database.books.filter(
-        (book) => book.ISBN !== req.params.isbn
-    );
+shapeAI.delete("/book/delete/:isbn", async(req, res) => {
+    const updatedBookDatabase = await BookModel.findOneAndDelete({
+        ISBN : req.params.isbn,
+    });
+    
+    // const updatedBookDatabase =  database.books.filter(
+    //     (book) => book.ISBN !== req.params.isbn
+    // );
 
-    database.books = updatedBookDatabase;
-    return res.json({ books: database.books });
+    // database.books = updatedBookDatabase;
+    return res.json({ books: updatedBookDatabase});
 });
 
 /*
@@ -311,35 +315,58 @@ Access              PUBLIC
 Parameters          isbn, author id
 Method              DELETE
 */
-shapeAI.delete("/book/delete/author/:isbn/:authorId", (req, res) => {
-
+shapeAI.delete("/book/delete/author/:isbn/:authorId", async(req, res) => {
     // update the book database
-    database.books.forEach((book) => {
-        if (book.ISBN === req.params.isbn) {
-            const newAuthorList = book.authors.filter(
-                (author) => author !== parseInt(req.params.authorId)
-             );
-             book.authors = newAuthorList;
-             return;
-        }
-    });
+    
+    const updatedBook = await BookModel.findOneAndUpdate(
+    {
+        ISBN: req.params.isbn,
+    },
+    {
+        $pull: {
+            authors: parseInt(req.params.authorId)
+        },
+    },
+    { new: true }
+);
+    
+    // database.books.forEach((book) => {
+    //     if (book.ISBN === req.params.isbn) {
+    //         const newAuthorList = book.authors.filter(
+    //             (author) => author !== parseInt(req.params.authorId)
+    //          );
+    //          book.authors = newAuthorList;
+    //          return;
+    //     }
+    // });
 
     // update the author database
-    database.authors.forEach((author) => {
-        if (author.id === parseInt(req.params.authorId)) {
-            const newBookList = author.books.filter(
-                (book) => book !== req.params.isbn
-            );
+    const updatedAuthor = await AuthorModel.findOneAndUpdate(
+    {
+        id: parseInt(req.params.authorId),
+    },
+    {
+        $pull: {
+            books: req.params.isbn,
+        },
+    }, 
+    { new: true }
+);
+    // database.authors.forEach((author) => {
+    //     if (author.id === parseInt(req.params.authorId)) {
+    //         const newBookList = author.books.filter(
+    //             (book) => book !== req.params.isbn
+    //         );
 
-            author.books = newBookList;
-            return;
-        }
-    });
+    //         author.books = newBookList;
+    //         return;
+    //     }
+    // });
 
     return res.json({
         message: "author was deleted!!!!",
-        book: database.books,
-        author: database.authors,
+        book: updatedBook,
+        author: updatedAuthor,
     });
 });
 
