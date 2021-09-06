@@ -23,16 +23,21 @@ Parameters          isbn
 Method              GET
 */
 Router.get("/:isbn", (req,res) => {
-    const getSpecificAuthors = database.authors.filter((author) =>
-    author.books.includes(req.params.isbn)
-    );
-
-    if(getSpecificAuthors.length ===0) {
-        return res.json({
-            error: `No author found for the book ${req.params.isbn}`
-        });
+    try {
+        const getSpecificAuthors = database.authors.filter((author) =>
+        author.books.includes(req.params.isbn)
+        );
+    
+        if(getSpecificAuthors.length ===0) {
+            return res.json({
+                error: `No author found for the book ${req.params.isbn}`
+            });
+        }
+        return res.json({ authors: getSpecificAuthors});
+    } catch (error) {
+        return res.json({ error : error.message });
     }
-    return res.json({ authors: getSpecificAuthors});
+   
 });
 
 /*
@@ -51,3 +56,7 @@ Router.post("/new", (req, res) => {
 });
 
 module.exports = Router;
+
+// syntax was correct 
+// logical error -> we were not handling errors -> crashed
+// try catch
